@@ -1,0 +1,5 @@
+{
+  "AppSyncApiName": "imagefinder",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false
+}
