@@ -1,14 +1,14 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createNote = /* GraphQL */ `
-  mutation CreateNote(
-    $input: CreateNoteInput!
-    $condition: ModelNoteConditionInput
+export const createImage = /* GraphQL */ `
+  mutation CreateImage(
+    $input: CreateImageInput!
+    $condition: ModelImageConditionInput
   ) {
-    createNote(input: $input, condition: $condition) {
+    createImage(input: $input, condition: $condition) {
       id
-      name
+      tags
       description
       image
       createdAt
@@ -16,14 +16,14 @@ export const createNote = /* GraphQL */ `
     }
   }
 `;
-export const updateNote = /* GraphQL */ `
-  mutation UpdateNote(
-    $input: UpdateNoteInput!
-    $condition: ModelNoteConditionInput
+export const updateImage = /* GraphQL */ `
+  mutation UpdateImage(
+    $input: UpdateImageInput!
+    $condition: ModelImageConditionInput
   ) {
-    updateNote(input: $input, condition: $condition) {
+    updateImage(input: $input, condition: $condition) {
       id
-      name
+      tags
       description
       image
       createdAt
@@ -31,14 +31,14 @@ export const updateNote = /* GraphQL */ `
     }
   }
 `;
-export const deleteNote = /* GraphQL */ `
-  mutation DeleteNote(
-    $input: DeleteNoteInput!
-    $condition: ModelNoteConditionInput
+export const deleteImage = /* GraphQL */ `
+  mutation DeleteImage(
+    $input: DeleteImageInput!
+    $condition: ModelImageConditionInput
   ) {
-    deleteNote(input: $input, condition: $condition) {
+    deleteImage(input: $input, condition: $condition) {
       id
-      name
+      tags
       description
       image
       createdAt

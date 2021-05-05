@@ -2,86 +2,86 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { API, Storage } from 'aws-amplify';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
-import { listNotes } from './graphql/queries';
-import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
+import { listImages } from './graphql/queries';
+import { createImage as createImageMutation, deleteImage as deleteImageMutation } from './graphql/mutations';
 
 
-const initialFormState = { name: '', description: '' }
+const initialFormState = { tags: '', description: '' }
 
 function App() {
-  const [notes, setNotes] = useState([]);
+  const [images, setImages] = useState([]);
   const [formData, setFormData] = useState(initialFormState);
 
   useEffect(() => {
-    fetchNotes();
+    fetchImages();
   }, []);
 
-  async function fetchNotes() {
-    const apiData = await API.graphql({ query: listNotes });
-    const notesFromAPI = apiData.data.listNotes.items;
-    await Promise.all(notesFromAPI.map(async note => {
-      if (note.image) {
-        const image = await Storage.get(note.image);
-        note.image = image;
+  async function fetchImages() {
+    const apiData = await API.graphql({ query: listImages });
+    const imagesFromAPI = apiData.data.listImages.items;
+    await Promise.all(imagesFromAPI.map(async image => {
+      if (image.image) {
+        const image = await Storage.get(image.image);
+        image.image = image;
       }
-      return note;
+      return image;
     }))
-    setNotes(apiData.data.listNotes.items);
+    setImages(apiData.data.listImages.items);
   }
 
-  async function createNote() {
-    if (!formData.name || !formData.description) return;
-    await API.graphql({ query: createNoteMutation, variables: { input: formData } });
+  async function createImage() {
+    if (!formData.tags || !formData.description) return;
+    await API.graphql({ query: createImageMutation, variables: { input: formData } });
     if (formData.image) {
       const image = await Storage.get(formData.image);
       formData.image = image;
     }
-    setNotes([ ...notes, formData ]);
+    setImages([ ...images, formData ]);
     setFormData(initialFormState);
   }
 
   async function onChange(e) {
     if (!e.target.files[0]) return
     const file = e.target.files[0];
-    setFormData({ ...formData, image: file.name });
-    await Storage.put(file.name, file);
-    fetchNotes();
+    setFormData({ ...formData, image: file.tags });
+    await Storage.put(file.tags, file);
+    fetchImages();
   }
 
-  async function deleteNote({ id }) {
-    const newNotesArray = notes.filter(note => note.id !== id);
-    setNotes(newNotesArray);
-    await API.graphql({ query: deleteNoteMutation, variables: { input: { id } }});
+  async function deleteImage({ id }) {
+    const newImagesArray = images.filter(image => image.id !== id);
+    setImages(newImagesArray);
+    await API.graphql({ query: deleteImageMutation, variables: { input: { id } }});
   }
 
   return (
-    <div className="App">
-      <h1>My Notes App</h1>
+    <div classtags="App">
+      <h1>My Images App</h1>
       <input
-        onChange={e => setFormData({ ...formData, 'name': e.target.value})}
-        placeholder="Note name"
-        value={formData.name}
+        onChange={e => setFormData({ ...formData, 'tags': e.target.value})}
+        placeholder="Image tags"
+        value={formData.tags}
       />
       <input
         onChange={e => setFormData({ ...formData, 'description': e.target.value})}
-        placeholder="Note description"
+        placeholder="Image description"
         value={formData.description}
       />
       <input
         type="file"
         onChange={onChange}
       />
-      <button onClick={createNote}>Create Note</button>
+      <button onClick={createImage}>Create Image</button>
       <div style={{marginBottom: 30}}>
       {
-        notes.map(note => (
-          <div key={note.id || note.name}>
-            <h2>{note.name}</h2>
-            <p>{note.description}</p>
+        images.map(image => (
+          <div key={image.id || image.tags}>
+            <h2>{image.tags}</h2>
+            <p>{image.description}</p>
             {
-              note.image && <img src={note.image} style={{width: 400}} alt="imagenote" />
+              image.image && <img src={image.image} style={{width: 400}} alt="imageimage" />
             }
-            <button onClick={() => deleteNote(note)}>Delete note</button>
+            <button onClick={() => deleteImage(image)}>Delete image</button>
           </div>
         ))
       }
