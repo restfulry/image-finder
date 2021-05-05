@@ -1,4 +1,4 @@
-type ImagePost @model {
+type Post @model {
   id: ID!
   description: String
   tags: String!

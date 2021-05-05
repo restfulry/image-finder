@@ -1,12 +1,12 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createImagePost = /* GraphQL */ `
-  mutation CreateImagePost(
-    $input: CreateImagePostInput!
-    $condition: ModelImagePostConditionInput
+export const createPost = /* GraphQL */ `
+  mutation CreatePost(
+    $input: CreatePostInput!
+    $condition: ModelPostConditionInput
   ) {
-    createImagePost(input: $input, condition: $condition) {
+    createPost(input: $input, condition: $condition) {
       id
       description
       tags
@@ -16,12 +16,12 @@ export const createImagePost = /* GraphQL */ `
     }
   }
 `;
-export const updateImagePost = /* GraphQL */ `
-  mutation UpdateImagePost(
-    $input: UpdateImagePostInput!
-    $condition: ModelImagePostConditionInput
+export const updatePost = /* GraphQL */ `
+  mutation UpdatePost(
+    $input: UpdatePostInput!
+    $condition: ModelPostConditionInput
   ) {
-    updateImagePost(input: $input, condition: $condition) {
+    updatePost(input: $input, condition: $condition) {
       id
       description
       tags
@@ -31,12 +31,12 @@ export const updateImagePost = /* GraphQL */ `
     }
   }
 `;
-export const deleteImagePost = /* GraphQL */ `
-  mutation DeleteImagePost(
-    $input: DeleteImagePostInput!
-    $condition: ModelImagePostConditionInput
+export const deletePost = /* GraphQL */ `
+  mutation DeletePost(
+    $input: DeletePostInput!
+    $condition: ModelPostConditionInput
   ) {
-    deleteImagePost(input: $input, condition: $condition) {
+    deletePost(input: $input, condition: $condition) {
       id
       description
       tags
