@@ -1,9 +1,9 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateImagePost = /* GraphQL */ `
-  subscription OnCreateImagePost {
-    onCreateImagePost {
+export const onCreatePost = /* GraphQL */ `
+  subscription OnCreatePost {
+    onCreatePost {
       id
       description
       tags
@@ -13,9 +13,9 @@ export const onCreateImagePost = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateImagePost = /* GraphQL */ `
-  subscription OnUpdateImagePost {
-    onUpdateImagePost {
+export const onUpdatePost = /* GraphQL */ `
+  subscription OnUpdatePost {
+    onUpdatePost {
       id
       description
       tags
@@ -25,9 +25,9 @@ export const onUpdateImagePost = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteImagePost = /* GraphQL */ `
-  subscription OnDeleteImagePost {
-    onDeleteImagePost {
+export const onDeletePost = /* GraphQL */ `
+  subscription OnDeletePost {
+    onDeletePost {
       id
       description
       tags

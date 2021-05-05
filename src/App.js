@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { API, Storage } from 'aws-amplify';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
-import { listPosts } from './graphql/queries';
+import { listPosts, getTags } from './graphql/queries';
 import { createPost as createPostMutation, deletePost as deletePostMutation } from './graphql/mutations';
 
 const initialFormState = { tags: '', description: '' }
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState(initialFormState);
 
   useEffect(() => {
@@ -53,9 +54,27 @@ function App() {
     await API.graphql({ query: deletePostMutation, variables: { input: { id } }});
   }
 
+  async function searchTags() {
+    const apiData = await API.graphql({ query: getTags });
+    const postsFromAPI = apiData.data.listPosts.items;
+    await Promise.all(postsFromAPI.map(async post => {
+      if (post.image) {
+        const image = await Storage.get(post.image);
+        post.image = image;
+      }
+      return post;
+    }))
+    setPosts(apiData.data.listPosts.items);
+  }
+
   return (
     <div className="App">
       <h1>My Posts App</h1>
+      <input
+        onChange={e => {console.log(e.target.value); setSearchTerm(e.target.value)}}
+        placeholder="Search"
+        value={searchTerm}
+      />
       <input
         onChange={e => setFormData({ ...formData, 'tags': e.target.value})}
         placeholder="Post tags"
@@ -79,7 +98,7 @@ function App() {
             <p>{post.description}</p>
             <button onClick={() => deletePost(post)}>Delete post</button>
             {
-              post.image && <img src={post.image} style={{width: 400}} />
+              post.image && <img src={post.image} style={{width: 400}} alt={post.description} />
             }
           </div>
         ))

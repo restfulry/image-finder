@@ -13,6 +13,20 @@ export const getPost = /* GraphQL */ `
     }
   }
 `;
+
+export const getTags = /* GraphQL */ `
+  query GetPost($id: ID!) {
+    getPost(id: $id) {
+      id
+      description
+      tags
+      image
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const listPosts = /* GraphQL */ `
   query ListPosts(
     $filter: ModelPostFilterInput
