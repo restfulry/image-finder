@@ -1,45 +1,45 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createImage = /* GraphQL */ `
-  mutation CreateImage(
-    $input: CreateImageInput!
-    $condition: ModelImageConditionInput
+export const createImagePost = /* GraphQL */ `
+  mutation CreateImagePost(
+    $input: CreateImagePostInput!
+    $condition: ModelImagePostConditionInput
   ) {
-    createImage(input: $input, condition: $condition) {
+    createImagePost(input: $input, condition: $condition) {
       id
-      tags
       description
+      tags
       image
       createdAt
       updatedAt
     }
   }
 `;
-export const updateImage = /* GraphQL */ `
-  mutation UpdateImage(
-    $input: UpdateImageInput!
-    $condition: ModelImageConditionInput
+export const updateImagePost = /* GraphQL */ `
+  mutation UpdateImagePost(
+    $input: UpdateImagePostInput!
+    $condition: ModelImagePostConditionInput
   ) {
-    updateImage(input: $input, condition: $condition) {
+    updateImagePost(input: $input, condition: $condition) {
       id
-      tags
       description
+      tags
       image
       createdAt
       updatedAt
     }
   }
 `;
-export const deleteImage = /* GraphQL */ `
-  mutation DeleteImage(
-    $input: DeleteImageInput!
-    $condition: ModelImageConditionInput
+export const deleteImagePost = /* GraphQL */ `
+  mutation DeleteImagePost(
+    $input: DeleteImagePostInput!
+    $condition: ModelImagePostConditionInput
   ) {
-    deleteImage(input: $input, condition: $condition) {
+    deleteImagePost(input: $input, condition: $condition) {
       id
-      tags
       description
+      tags
       image
       createdAt
       updatedAt

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { API, Storage } from 'aws-amplify';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
-import { listImages } from './graphql/queries';
-import { createImage as createImageMutation, deleteImage as deleteImageMutation } from './graphql/mutations';
+import { listImagePosts } from './graphql/queries';
+import { createImagePost as createImageMutation, deleteImagePost as deleteImageMutation } from './graphql/mutations';
 
 
 const initialFormState = { tags: '', description: '' }
@@ -17,8 +17,8 @@ function App() {
   }, []);
 
   async function fetchImages() {
-    const apiData = await API.graphql({ query: listImages });
-    const imagesFromAPI = apiData.data.listImages.items;
+    const apiData = await API.graphql({ query: listImagePosts });
+    const imagesFromAPI = apiData.data.listImagePosts.items;
     await Promise.all(imagesFromAPI.map(async image => {
       if (image.image) {
         const image = await Storage.get(image.image);
@@ -26,7 +26,7 @@ function App() {
       }
       return image;
     }))
-    setImages(apiData.data.listImages.items);
+    setImages(apiData.data.listImagePosts.items);
   }
 
   async function createImage() {
