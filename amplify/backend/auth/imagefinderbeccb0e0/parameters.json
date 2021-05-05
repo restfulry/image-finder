@@ -1,6 +1,6 @@
 {
     "identityPoolName": "imagefinderbeccb0e0_identitypool_beccb0e0",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "imagefbeccb0e0",
     "userPoolName": "imagefinderbeccb0e0_userpool_beccb0e0",
     "autoVerifiedAttributes": [
