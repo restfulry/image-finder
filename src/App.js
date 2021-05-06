@@ -9,7 +9,8 @@ const initialFormState = { tags: '', description: '' }
 
 function App() {
   const [posts, setPosts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchedPosts, setSearchedPosts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState(initialFormState);
 
   useEffect(() => {
@@ -55,26 +56,47 @@ function App() {
   }
 
   async function searchTags() {
-    const apiData = await API.graphql({ query: getTags });
+    const apiData = await API.graphql({ 
+      query: getTags, 
+      variables: {
+          searchQuery
+      },
+    });
+
     const postsFromAPI = apiData.data.listPosts.items;
+
     await Promise.all(postsFromAPI.map(async post => {
       if (post.image) {
         const image = await Storage.get(post.image);
         post.image = image;
+        console.log(image, "IMAGE FOUND")
       }
       return post;
-    }))
-    setPosts(apiData.data.listPosts.items);
-  }
+    }));
+
+    setSearchedPosts(apiData.data.listPosts.items);
+  };
 
   return (
     <div className="App">
       <h1>My Posts App</h1>
       <input
-        onChange={e => {console.log(e.target.value); setSearchTerm(e.target.value)}}
+        onChange={e => {console.log(e.target.value); setSearchQuery(e.target.value)}}
         placeholder="Search"
-        value={searchTerm}
+        value={searchQuery}
       />
+      <button onClick={searchTags}>Search</button>
+        {
+          searchedPosts.map((post, index) => (
+            <div key={index}>
+              {
+                post.image && <img src={post.image} style={{width: 400}} alt={post.description} />
+              }
+              <p>{post.description}</p>
+            </div>
+          ))
+        }
+        <br></br>
       <input
         onChange={e => setFormData({ ...formData, 'tags': e.target.value})}
         placeholder="Post tags"

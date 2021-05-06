@@ -15,17 +15,20 @@ export const getPost = /* GraphQL */ `
 `;
 
 export const getTags = /* GraphQL */ `
-  query GetPost($id: ID!) {
-    getPost(id: $id) {
-      id
-      description
-      tags
-      image
-      createdAt
-      updatedAt
+  query($searchQuery: String) {
+    listPosts(filter: {
+      tags: {
+        contains: $searchQuery
+      }
+    }) {
+      items {
+        tags
+        description
+        image
+      }
     }
   }
-`;
+  `;
 
 export const listPosts = /* GraphQL */ `
   query ListPosts(
