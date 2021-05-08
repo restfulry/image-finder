@@ -1,10 +1,7 @@
 import React from 'react';
 
 const UploadPage = ({
-  initialFormState,
   formData,
-  posts,
-  setPosts,
   setFormData,
   onChange,
   createPost,

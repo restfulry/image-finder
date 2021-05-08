@@ -8,6 +8,7 @@ import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listPosts, getTags } from '../../graphql/queries';
 import { createPost as createPostMutation, deletePost as deletePostMutation } from '../../graphql/mutations';
 
+import Nav from "../../components/Nav/Nav";
 import HomePage from "../HomePage/HomePage";
 import UploadPage from "../UploadPage/UploadPage";
 
@@ -89,7 +90,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Image Repo</h1>
+      <Nav />
       <Switch>
         <Route exact path="/" render={() => (
             <HomePage 
@@ -117,19 +118,19 @@ function App() {
         )}/>
         
         <Route exact path="/delete" render={() => (
-                <div style={{marginBottom: 30}}>
+          <div style={{marginBottom: 30}}>
+          {
+            posts.map(post => (
+              <div key={post.id || post.tags}>
                 {
-                  posts.map(post => (
-                    <div key={post.id || post.tags}>
-                      {
-                        post.image && <img src={post.image} style={{width: 400}} alt={post.description} />
-                      }
-                      <p>{post.tags}</p>
-                      <button onClick={() => deletePost(post)}>Delete post</button>
-                    </div>
-                  ))
+                  post.image && <img src={post.image} style={{width: 400}} alt={post.description} />
                 }
-                </div>
+                <p>{post.tags}</p>
+                <button onClick={() => deletePost(post)}>Delete post</button>
+              </div>
+            ))
+          }
+          </div>
         )}/>
 
       </Switch>
