@@ -1,10 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-function UploadPage() {
-
+const UploadPage = ({
+  formData,
+  setFormData,
+  onChange,
+  createPost,
+  isUploading,
+}) => {
 
   return (
-    <div></div>
+    <div>
+      <input
+        onChange={e => setFormData({ ...formData, 'tags': e.target.value})}
+        placeholder="Post tags"
+        value={formData.tags}
+      />
+      <input
+        onChange={e => setFormData({ ...formData, 'description': e.target.value})}
+        placeholder="Post description"
+        value={formData.description}
+      />
+      <input
+        type="file"
+        onChange={onChange}
+      />
+      <button onClick={createPost}>Create Post</button>
+      { isUploading ? <p>UPLOADING</p> : <p>Uploaded!</p>}
+    </div>
   )
 }
 

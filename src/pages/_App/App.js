@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Switch, Route } from "react-router-dom";
+
 import './App.css';
-import { API, Storage } from 'aws-amplify';
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
+
+import { API, Storage, Auth } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import { listPosts, getTags } from '../../graphql/queries';
 import { createPost as createPostMutation, deletePost as deletePostMutation } from '../../graphql/mutations';
 
+import Nav from "../../components/Nav/Nav";
+import HomePage from "../HomePage/HomePage";
 import UploadPage from "../UploadPage/UploadPage";
 
 const initialFormState = { tags: '', description: '' }
@@ -14,6 +19,8 @@ function App() {
   const [searchedPosts, setSearchedPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState(initialFormState);
+  const [uploadedPicture, setUploadedPicture] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     fetchPosts();
@@ -44,8 +51,10 @@ function App() {
     if (!formData.tags || !formData.description) return;
     await API.graphql({ query: createPostMutation, variables: { input: formData } });
     if (formData.image) {
+      setIsUploading(true);
       const image = await Storage.get(formData.image);
       formData.image = image;
+      setIsUploading(false);
     }
     setPosts([ ...posts, formData ]);
     setFormData(initialFormState);
@@ -81,54 +90,46 @@ function App() {
 
   return (
     <div className="App">
-      <h1>My Posts App</h1>
-      <input
-        onChange={e => {console.log(e.target.value); setSearchQuery(e.target.value)}}
-        placeholder="Search"
-        value={searchQuery}
-      />
-      <button onClick={searchTags}>Search</button>
-        {
-          searchedPosts.map((post, index) => (
-            <div key={index}>
-              {
-                post.image && <img src={post.image} style={{width: 400}} alt={post.description} />
-              }
-              <p>{post.description}</p>
-            </div>
-          ))
-        }
-        <br></br>
-      <input
-        onChange={e => setFormData({ ...formData, 'tags': e.target.value})}
-        placeholder="Post tags"
-        value={formData.tags}
-      />
-      <input
-        onChange={e => setFormData({ ...formData, 'description': e.target.value})}
-        placeholder="Post description"
-        value={formData.description}
-      />
-      <input
-        type="file"
-        onChange={onChange}
-      />
-      <button onClick={createPost}>Create Post</button>
-      <div style={{marginBottom: 30}}>
-      {
-        posts.map(post => (
-          <div key={post.id || post.tags}>
-            {
-              post.image && <img src={post.image} style={{width: 400}} alt={post.description} />
-            }
-            <p>{post.tags}</p>
-            {/* <p>{post.description}</p> */}
-            <button onClick={() => deletePost(post)}>Delete post</button>
+      <Nav />
+      <Switch>
+        <Route exact path="/" render={() => (
+          <HomePage 
+            searchQuery={searchQuery}
+            searchTags={searchTags}
+            searchedPosts={searchedPosts}
+            posts={posts}
+            setSearchQuery={setSearchQuery}
+          />
+        )}/>
+        <Route exact path="/upload" render={() => (
+          <UploadPage 
+            initialFormState={initialFormState} 
+            formData={formData} 
+            posts={posts} 
+            setPosts={setPosts} 
+            setFormData={setFormData} 
+            createPost={createPost}
+            onChange={onChange}
+            isUploading={isUploading}
+            />
+        )}/>
+        
+        <Route exact path="/delete" render={() => (
+          <div style={{marginBottom: 30}}>
+          {
+            posts.map(post => (
+              <div key={post.id || post.tags}>
+                {
+                  post.image && <img src={post.image} style={{width: 400}} alt={post.description} />
+                }
+                <p>{post.tags}</p>
+                <button onClick={() => deletePost(post)}>Delete post</button>
+              </div>
+            ))
+          }
           </div>
-        ))
-      }
-      </div>
-      <AmplifySignOut />
+        )}/>
+      </Switch>
     </div>
   );
 }

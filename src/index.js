@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import './index.css';
 import App from './pages/_App/App';
 import reportWebVitals from './reportWebVitals';
@@ -9,9 +10,9 @@ import config from './aws-exports';
 Amplify.configure(config);
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Router>
     <App />
-  </React.StrictMode>,
+  </Router>,
   document.getElementById('root')
 );
 
