@@ -19,6 +19,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState(initialFormState);
   const [uploadedPicture, setUploadedPicture] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     fetchPosts();
@@ -49,8 +50,10 @@ function App() {
     if (!formData.tags || !formData.description) return;
     await API.graphql({ query: createPostMutation, variables: { input: formData } });
     if (formData.image) {
+      setIsUploading(true);
       const image = await Storage.get(formData.image);
       formData.image = image;
+      setIsUploading(false);
     }
     setPosts([ ...posts, formData ]);
     setFormData(initialFormState);
@@ -108,7 +111,9 @@ function App() {
             setPosts={setPosts} 
             setFormData={setFormData} 
             createPost={createPost}
-            onChange={onChange}/>
+            onChange={onChange}
+            isUploading={isUploading}
+            />
         )}/>
         
         <Route exact path="/delete" render={() => (

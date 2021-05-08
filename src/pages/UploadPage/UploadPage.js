@@ -8,6 +8,7 @@ const UploadPage = ({
   setFormData,
   onChange,
   createPost,
+  isUploading,
 }) => {
 
   return (
@@ -27,6 +28,7 @@ const UploadPage = ({
         onChange={onChange}
       />
       <button onClick={createPost}>Create Post</button>
+      { isUploading ? <p>UPLOADING</p> : <>Uploaded!</>}
     </div>
   )
 }
