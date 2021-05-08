@@ -84,7 +84,7 @@ function App() {
     await API.graphql({ 
       query: deletePostMutation, 
       variables: { 
-        input: { id } 
+        input: { id: id, _version: 1 }
       }
     });
   }
