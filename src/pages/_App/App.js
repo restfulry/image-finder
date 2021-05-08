@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { API, Storage } from 'aws-amplify';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
-import { listPosts, getTags } from './graphql/queries';
-import { createPost as createPostMutation, deletePost as deletePostMutation } from './graphql/mutations';
+import { listPosts, getTags } from '../../graphql/queries';
+import { createPost as createPostMutation, deletePost as deletePostMutation } from '../../graphql/mutations';
+
+import UploadPage from "../UploadPage/UploadPage";
 
 const initialFormState = { tags: '', description: '' }
 
@@ -116,12 +118,12 @@ function App() {
       {
         posts.map(post => (
           <div key={post.id || post.tags}>
-            <h2>{post.tags}</h2>
-            <p>{post.description}</p>
-            <button onClick={() => deletePost(post)}>Delete post</button>
             {
               post.image && <img src={post.image} style={{width: 400}} alt={post.description} />
             }
+            <p>{post.tags}</p>
+            {/* <p>{post.description}</p> */}
+            <button onClick={() => deletePost(post)}>Delete post</button>
           </div>
         ))
       }
