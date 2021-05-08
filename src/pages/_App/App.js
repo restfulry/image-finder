@@ -3,8 +3,8 @@ import { Switch, Route } from "react-router-dom";
 
 import './App.css';
 
-import { API, Storage } from 'aws-amplify';
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
+import { API, Storage, Auth } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import { listPosts, getTags } from '../../graphql/queries';
 import { createPost as createPostMutation, deletePost as deletePostMutation } from '../../graphql/mutations';
 
@@ -93,17 +93,14 @@ function App() {
       <Nav />
       <Switch>
         <Route exact path="/" render={() => (
-            <HomePage 
-              searchQuery={searchQuery}
-              searchTags={searchTags}
-              searchedPosts={searchedPosts}
-              posts={posts}
-            
-              setSearchQuery={setSearchQuery}
-
-            />
-          )}
+          <HomePage 
+            searchQuery={searchQuery}
+            searchTags={searchTags}
+            searchedPosts={searchedPosts}
+            posts={posts}
+            setSearchQuery={setSearchQuery}
           />
+        )}/>
         <Route exact path="/upload" render={() => (
           <UploadPage 
             initialFormState={initialFormState} 
@@ -132,9 +129,7 @@ function App() {
           }
           </div>
         )}/>
-
       </Switch>
-      <AmplifySignOut />
     </div>
   );
 }

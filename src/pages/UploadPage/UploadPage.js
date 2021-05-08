@@ -25,7 +25,7 @@ const UploadPage = ({
         onChange={onChange}
       />
       <button onClick={createPost}>Create Post</button>
-      { isUploading ? <p>UPLOADING</p> : <>Uploaded!</>}
+      { isUploading ? <p>UPLOADING</p> : <p>Uploaded!</p>}
     </div>
   )
 }

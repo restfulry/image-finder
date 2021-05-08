@@ -11,3 +11,8 @@
   text-transform: uppercase;
   font-weight: bold;
 }
+
+#btn-signout {
+  width: 10px;
+  background-color: #fff;
+}

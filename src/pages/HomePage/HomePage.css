@@ -1,0 +1,23 @@
+p {
+  font-size: 0.5rem;
+  margin: 10px;
+}
+
+button {
+  margin: 25px;
+  background-color: #fff;
+}
+
+.image-gallery {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 30vw;
+  padding-right: 30vw;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  margin: 10px;
+}
