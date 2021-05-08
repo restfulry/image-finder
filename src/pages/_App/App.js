@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Switch, Route, Router } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import './App.css';
 
@@ -8,6 +8,7 @@ import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listPosts, getTags } from '../../graphql/queries';
 import { createPost as createPostMutation, deletePost as deletePostMutation } from '../../graphql/mutations';
 
+import HomePage from "../HomePage/HomePage";
 import UploadPage from "../UploadPage/UploadPage";
 
 const initialFormState = { tags: '', description: '' }
@@ -17,6 +18,7 @@ function App() {
   const [searchedPosts, setSearchedPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState(initialFormState);
+  const [uploadedPicture, setUploadedPicture] = useState([]);
 
   useEffect(() => {
     fetchPosts();
@@ -43,6 +45,16 @@ function App() {
     fetchPosts();
   }
 
+  async function createPost() {
+    if (!formData.tags || !formData.description) return;
+    await API.graphql({ query: createPostMutation, variables: { input: formData } });
+    if (formData.image) {
+      const image = await Storage.get(formData.image);
+      formData.image = image;
+    }
+    setPosts([ ...posts, formData ]);
+    setFormData(initialFormState);
+  }
 
   async function deletePost({ id }) {
     const newPostsArray = posts.filter(post => post.id !== id);
@@ -77,33 +89,15 @@ function App() {
       <h1>Image Repo</h1>
       <Switch>
         <Route exact path="/" render={() => (
-            <>
-            <input
-              onChange={e => {console.log(e.target.value); setSearchQuery(e.target.value)}}
-              placeholder="Search"
-              value={searchQuery}
+            <HomePage 
+              searchQuery={searchQuery}
+              searchTags={searchTags}
+              searchedPosts={searchedPosts}
+              posts={posts}
+            
+              setSearchQuery={setSearchQuery}
+
             />
-            <button onClick={searchTags}>Search</button>
-              {
-                searchQuery ? searchedPosts.map((post, index) => (
-                  <div key={index}>
-                    {
-                      post.image && <img src={post.image} style={{width: 400}} alt={post.description} />
-                    }
-                    <p>{post.tags}</p>
-                  </div>
-                ))
-                :
-                posts.map(post => (
-                  <div key={post.id || post.tags}>
-                    {
-                      post.image && <img src={post.image} style={{width: 400}} alt={post.description} />
-                    }
-                    <p>{post.tags}</p>
-                  </div>
-                ))
-              }
-              </>
           )}
           />
         <Route exact path="/upload" render={() => (
@@ -113,6 +107,7 @@ function App() {
             posts={posts} 
             setPosts={setPosts} 
             setFormData={setFormData} 
+            createPost={createPost}
             onChange={onChange}/>
         )}/>
         

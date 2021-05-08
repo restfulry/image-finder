@@ -1,8 +1,5 @@
 import React from 'react';
 
-import { API, Storage } from 'aws-amplify';
-import { createPost as createPostMutation} from '../../graphql/mutations';
-
 const UploadPage = ({
   initialFormState,
   formData,
@@ -10,18 +7,8 @@ const UploadPage = ({
   setPosts,
   setFormData,
   onChange,
+  createPost,
 }) => {
-
-  async function createPost() {
-    if (!formData.tags || !formData.description) return;
-    await API.graphql({ query: createPostMutation, variables: { input: formData } });
-    if (formData.image) {
-      const image = await Storage.get(formData.image);
-      formData.image = image;
-    }
-    setPosts([ ...posts, formData ]);
-    setFormData(initialFormState);
-  }
 
   return (
     <div>
