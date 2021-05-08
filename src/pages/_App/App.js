@@ -5,7 +5,7 @@ import './App.css';
 
 import { API, Storage, Auth } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
-import { listPosts, getTags } from '../../graphql/queries';
+import { listPosts, getTags, getPost } from '../../graphql/queries';
 import { createPost as createPostMutation, deletePost as deletePostMutation } from '../../graphql/mutations';
 
 import Nav from "../../components/Nav/Nav";
@@ -19,8 +19,10 @@ function App() {
   const [searchedPosts, setSearchedPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState(initialFormState);
+  const [uploadedId, setUploadedId] = useState('');
   const [uploadedPicture, setUploadedPicture] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   useEffect(() => {
     fetchPosts();
@@ -39,6 +41,18 @@ function App() {
     setPosts(apiData.data.listPosts.items);
   }
 
+  async function fetchPost() {
+    console.log(uploadedId, "Fetch uploaded ID");
+    const apiData = await API.graphql({ 
+      query: getPost, 
+      variables: {
+        uploadedId
+      },
+    });
+    console.log(apiData, "fetch API Data")
+    setUploadedPicture();
+  }
+
   async function onChange(e) {
     if (!e.target.files[0]) return
     const file = e.target.files[0];
@@ -49,21 +63,30 @@ function App() {
 
   async function createPost() {
     if (!formData.tags || !formData.description) return;
-    await API.graphql({ query: createPostMutation, variables: { input: formData } });
+    const results = await API.graphql({ query: createPostMutation, variables: { input: formData } });
     if (formData.image) {
       setIsUploading(true);
       const image = await Storage.get(formData.image);
       formData.image = image;
       setIsUploading(false);
     }
+    setUploadedId(results.data.createPost.id);
+    console.log(typeof(results.data.createPost.id), "Results Data");
     setPosts([ ...posts, formData ]);
     setFormData(initialFormState);
+    setUploadSuccess(true);
+    console.log(uploadedId, "Uploaded ID");
   }
 
   async function deletePost({ id }) {
     const newPostsArray = posts.filter(post => post.id !== id);
     setPosts(newPostsArray);
-    await API.graphql({ query: deletePostMutation, variables: { input: { id } }});
+    await API.graphql({ 
+      query: deletePostMutation, 
+      variables: { 
+        input: { id } 
+      }
+    });
   }
 
   async function searchTags() {
@@ -80,7 +103,6 @@ function App() {
       if (post.image) {
         const image = await Storage.get(post.image);
         post.image = image;
-        console.log(image, "IMAGE FOUND")
       }
       return post;
     }));
@@ -106,11 +128,13 @@ function App() {
             initialFormState={initialFormState} 
             formData={formData} 
             posts={posts} 
+            isUploading={isUploading}
+            uploadSuccess={uploadSuccess}
             setPosts={setPosts} 
             setFormData={setFormData} 
             createPost={createPost}
             onChange={onChange}
-            isUploading={isUploading}
+            fetchPost={fetchPost}
             />
         )}/>
         

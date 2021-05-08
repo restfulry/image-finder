@@ -6,7 +6,14 @@ const UploadPage = ({
   onChange,
   createPost,
   isUploading,
+  uploadSuccess,
+  fetchPost,
 }) => {
+
+  async function createThenFetch() {
+    await createPost();
+    fetchPost();
+  };
 
   return (
     <div>
@@ -24,8 +31,10 @@ const UploadPage = ({
         type="file"
         onChange={onChange}
       />
-      <button onClick={createPost}>Create Post</button>
-      { isUploading ? <p>UPLOADING</p> : <p>Uploaded!</p>}
+      <button onClick={createThenFetch}>
+        Create Post
+      </button>
+        { isUploading ? <p>UPLOADING</p> : uploadSuccess ? <p>Uploaded!</p> : <p></p>}
     </div>
   )
 }

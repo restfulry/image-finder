@@ -13,7 +13,7 @@ const HomePage = ({
   return (
     <div>
       <input
-        onChange={e => {console.log(e.target.value); setSearchQuery(e.target.value)}}
+        onChange={e => {setSearchQuery(e.target.value)}}
         placeholder="Search tags (i.e. sunset, mountain, etc...)"
         value={searchQuery}
       />
