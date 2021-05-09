@@ -36,10 +36,10 @@ Demo Pw: test123456
 
 - Expand search to include query natural language synonyms and disregard special characters
 
+## Screenshot
+
+![App Screenshot](public/screenshots/imagefinder.png)
+
 ## Appendix
 
 Images by yours truly.
-
-## Screenshots
-
-![App Screenshot]("./public/screenshots/Screen Shot 2021-05-09 at 6.50.16 PM.png")
