@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Switch, Route } from "react-router-dom";
 
 import './App.css';
@@ -24,14 +24,6 @@ function App() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  useEffect(() => { 
-    fetchPost() 
-  }, [uploadedId]);
-
   async function fetchPosts() {
     const apiData = await API.graphql({ query: listPosts });
     const postsFromAPI = apiData.data.listPosts.items;
@@ -45,7 +37,7 @@ function App() {
     setPosts(apiData.data.listPosts.items);
   }
 
-  async function fetchPost() {
+  const fetchPost = useCallback(async() => {
     const apiData = await API.graphql({ 
       query: getPost, 
       variables: {
@@ -53,7 +45,7 @@ function App() {
       },
     });
     setUploadedPicture(apiData.data.getPost);
-  }
+  }, [uploadedId])
 
   async function onChange(e) {
     if (!e.target.files[0]) return
@@ -113,6 +105,16 @@ function App() {
 
     setSearchedPosts(apiData.data.listPosts.items);
   };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    if(uploadedId) {
+      fetchPost();
+    };
+  }, [fetchPost, uploadedId]);
 
   return (
     <div className="App">
