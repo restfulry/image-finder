@@ -13,12 +13,12 @@ const UploadPage = ({
   return (
     <div>
       <input
-        onChange={e => setFormData({ ...formData, 'tags': e.target.value})}
+        onChange={e => setFormData({ ...formData, 'tags': e.target.value.toLowerCase()})}
         placeholder="Post tags"
         value={formData.tags}
       />
       <input
-        onChange={e => setFormData({ ...formData, 'description': e.target.value})}
+        onChange={e => setFormData({ ...formData, 'description': e.target.value.toLowerCase()})}
         placeholder="Post description"
         value={formData.description}
       />

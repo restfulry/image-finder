@@ -47,14 +47,6 @@ function App() {
     setUploadedPicture(apiData.data.getPost);
   }, [uploadedId])
 
-  async function onChange(e) {
-    if (!e.target.files[0]) return
-    const file = e.target.files[0];
-    setFormData({ ...formData, image: file.name });
-    await Storage.put(file.name, file);
-    fetchPosts();
-  }
-
   async function createPost() {
     if (!formData.tags || !formData.description) return;
     const results = await API.graphql({ query: createPostMutation, variables: { input: formData } });
@@ -105,6 +97,14 @@ function App() {
 
     setSearchedPosts(apiData.data.listPosts.items);
   };
+
+  async function onChange(e) {
+    if (!e.target.files[0]) return
+    const file = e.target.files[0];
+    setFormData({ ...formData, image: file.name });
+    await Storage.put(file.name, file);
+    fetchPosts();
+  }
 
   useEffect(() => {
     fetchPosts();

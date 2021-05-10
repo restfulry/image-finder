@@ -13,7 +13,7 @@ const HomePage = ({
   return (
     <div>
       <input
-        onChange={e => {setSearchQuery(e.target.value)}}
+        onChange={e => {setSearchQuery(e.target.value.toLowerCase())}}
         placeholder="Search tags (i.e. sunset, mountain, etc...)"
         value={searchQuery}
       />
