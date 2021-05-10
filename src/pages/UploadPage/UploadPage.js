@@ -4,16 +4,10 @@ const UploadPage = ({
   formData,
   setFormData,
   onChange,
-  createPost,
   isUploading,
   uploadSuccess,
-  fetchPost,
+  createThenFetch,
 }) => {
-
-  async function createThenFetch() {
-    await createPost();
-    fetchPost();
-  };
 
   return (
     <div>

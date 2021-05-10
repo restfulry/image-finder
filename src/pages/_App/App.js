@@ -28,6 +28,10 @@ function App() {
     fetchPosts();
   }, []);
 
+  useEffect(() => { 
+    fetchPost() 
+  }, [uploadedId]);
+
   async function fetchPosts() {
     const apiData = await API.graphql({ query: listPosts });
     const postsFromAPI = apiData.data.listPosts.items;
@@ -42,14 +46,13 @@ function App() {
   }
 
   async function fetchPost() {
-    console.log(uploadedId, "Fetch uploaded ID");
     const apiData = await API.graphql({ 
       query: getPost, 
       variables: {
         uploadedId
       },
     });
-    console.log(apiData, "fetch API Data")
+    console.log(apiData, "fetchPost apiData")
     setUploadedPicture();
   }
 
@@ -77,6 +80,10 @@ function App() {
     setUploadSuccess(true);
     console.log(uploadedId, "Uploaded ID");
   }
+
+  async function createThenFetch() {
+    await createPost();
+  };
 
   async function deletePost({ id }) {
     const newPostsArray = posts.filter(post => post.id !== id);
@@ -135,6 +142,7 @@ function App() {
             createPost={createPost}
             onChange={onChange}
             fetchPost={fetchPost}
+            createThenFetch={createThenFetch}
             />
         )}/>
         
