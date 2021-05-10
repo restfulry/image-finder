@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 
 import './App.css';
 
-import { API, Storage, Auth } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { listPosts, getTags, getPost } from '../../graphql/queries';
 import { createPost as createPostMutation, deletePost as deletePostMutation } from '../../graphql/mutations';
@@ -52,8 +52,7 @@ function App() {
         uploadedId
       },
     });
-    console.log(apiData, "fetchPost apiData")
-    setUploadedPicture();
+    setUploadedPicture(apiData.data.getPost);
   }
 
   async function onChange(e) {
@@ -74,11 +73,9 @@ function App() {
       setIsUploading(false);
     }
     setUploadedId(results.data.createPost.id);
-    console.log(typeof(results.data.createPost.id), "Results Data");
     setPosts([ ...posts, formData ]);
     setFormData(initialFormState);
     setUploadSuccess(true);
-    console.log(uploadedId, "Uploaded ID");
   }
 
   async function createThenFetch() {
@@ -137,6 +134,7 @@ function App() {
             posts={posts} 
             isUploading={isUploading}
             uploadSuccess={uploadSuccess}
+            uploadedPicture={uploadedPicture}
             setPosts={setPosts} 
             setFormData={setFormData} 
             createPost={createPost}

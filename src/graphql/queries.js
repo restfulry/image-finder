@@ -2,8 +2,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const getPost = /* GraphQL */ `
-  query GetPost($id: ID!) {
-    getPost(id: $id) {
+  query GetPost($uploadedId: ID!) {
+    getPost(id: $uploadedId) {
       id
       description
       tags

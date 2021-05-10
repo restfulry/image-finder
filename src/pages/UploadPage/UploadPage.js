@@ -6,6 +6,7 @@ const UploadPage = ({
   onChange,
   isUploading,
   uploadSuccess,
+  uploadedPicture,
   createThenFetch,
 }) => {
 
@@ -28,7 +29,8 @@ const UploadPage = ({
       <button onClick={createThenFetch}>
         Create Post
       </button>
-        { isUploading ? <p>UPLOADING</p> : uploadSuccess ? <p>Uploaded!</p> : <p></p>}
+      <br></br>
+        { isUploading ? <p>UPLOADING</p> : uploadSuccess && uploadedPicture ? uploadedPicture.image && <img src={uploadedPicture.image} style={{width: 400}} alt={uploadedPicture.description} /> : <p></p>}
     </div>
   )
 }
